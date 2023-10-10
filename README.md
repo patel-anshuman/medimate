@@ -3,7 +3,7 @@
 ## Description
 MediMate is a cutting-edge health assistant chatbot designed to provide comprehensive support. From scheduling doctor appointments, extracting prescription details from PDFs, and offering emergency assistance, to dispensing health tips and home remedies, MediMate is your reliable and friendly companion for all your health-related needs.
 
-## Features
+## Key Features
 - appointment scheduling
 - prescription pdf comprehensive medication help
 - emergency assistance
@@ -15,6 +15,11 @@ MediMate is a cutting-edge health assistant chatbot designed to provide comprehe
 - Embeddings
 - Fine Tuning
 - GPT Functions
+
+## Technology Stacks
+- Front-end: React.js
+- Back-end: Python, Flask
+- Database: MongoDB (Chat History), Pinecone (Vector DB)
 
 ## Daily Planning
 | Day       | Tasks              | Issues | Tasks Completed | Issues Completed |
