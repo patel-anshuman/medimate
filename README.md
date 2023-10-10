@@ -24,8 +24,8 @@ MediMate is a cutting-edge health assistant chatbot designed to provide comprehe
 ## Daily Planning
 | Day       | Tasks              | Issues | Tasks Completed | Issues Completed |
 | --------- | ------------------ | ------ | --------------- | ---------------- |
-| Wednesday |                    |        |                 |                  |
-| Thursday  |                    |        |                 |                  |
-| Friday    |                    |        |                 |                  |
+| Wednesday |         2           |    5    |                 |                  |
+| Thursday  |         2           |    6    |                 |                  |
+| Friday    |          2          |    3    |                 |                  |
 
 _(refer to the issues tab for detailed breakdown)_
