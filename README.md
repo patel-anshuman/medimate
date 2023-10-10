@@ -22,4 +22,5 @@ MediMate is a cutting-edge health assistant chatbot designed to provide comprehe
 | Wednesday |                    |        |                 |                  |
 | Thursday  |                    |        |                 |                  |
 | Friday    |                    |        |                 |                  |
+
 _(refer to the issues tab for detailed breakdown)_
