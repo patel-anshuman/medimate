@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import logo from "./images/medimate.png"
 import dot3 from "./images/3dot.png"
+import save from "./images/save.png"
+import clear from "./images/clear.png"
+
 import ChatBox from './components/ChatBox';
 
 import { IconButton } from '@chakra-ui/react';
@@ -27,6 +30,12 @@ function App() {
             </div>
           </div>
           <div>
+            <button className='hd-btn'>
+              <img src={clear} alt="clear" />
+            </button>
+            <button className='hd-btn'>
+              <img src={save} alt="save" />
+            </button>
             <button className='hd-btn'>
               <img src={dot3} alt="3 dot" />
             </button>
