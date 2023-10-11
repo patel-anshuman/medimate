@@ -1,0 +1,104 @@
+.chat-box {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 83%;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    /* border-radius: 5px; */
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.conversation {
+    flex: 1;
+    /* height: 50dvh; */
+    border-radius: 10px;
+    background-image: url("../images/chat.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 8%;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding:2px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.conversation:nth-child(2n) {
+    align-self: flex-end;
+    /* border: 2px solid red; */
+}
+.message {
+    max-width: 80%;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.message.You {
+    background-color: #3eb798;
+    color: #fff;
+    align-self: flex-end;
+}
+
+.message.Bot {
+    background-color: #abdfcf;
+    color: #333;
+}
+
+.input-area {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    padding-left: 15px;
+    border: 1px solid #00000050;
+    border-radius: 20px;
+    font-size: 16px;
+}
+
+.pr-btn {
+    padding: 5px 20px;
+    background-color: #3fb398;
+    color: #fff;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+
+}
+
+.pr-btn:hover {
+    background-color: #369780;
+}
+
+.sc-btn {
+    padding: 5px 10px;
+    background-color: #f2f2f2;
+    color: #333;
+    /* border: 1px solid #55dd98; */
+    border: 1px solid #00000050;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+
+}
+.sc-btn:hover {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+button:disabled {
+    background-color: #ccc;
+    /* Gray color for disabled state */
+    cursor: not-allowed;
+}
