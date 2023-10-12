@@ -13,6 +13,16 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 
 function App() {
 
+  const [isBoxLoading, setIsBoxLoading] = useState(true);
+
+  // useEffect(() => {
+  //   const loadingTimeout = setTimeout(() => {
+  //     setIsBoxLoading(false);
+  //   }, 3000);
+
+  //   return () => clearTimeout(loadingTimeout);
+  // }, []);
+
   useEffect(() => {
     document.title = 'MediMate: Your personal health assist bot';
   }, []);
@@ -41,7 +51,14 @@ function App() {
             </button>
           </div>
         </header>
-        <ChatBox />
+        {isBoxLoading ? (
+          <div className="loading-visual">
+            <div className="spinner"></div>
+            <h3>Loading Chat...</h3>
+          </div>
+        ) : (
+          <ChatBox />
+        )}
       </div>
     </div>
   );
