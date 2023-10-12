@@ -7,13 +7,15 @@ import clear from "./images/clear.png"
 
 import ChatBox from './components/ChatBox';
 
-import { IconButton } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
-
 
 function App() {
 
-  const [isBoxLoading, setIsBoxLoading] = useState(true);
+  const [isBoxLoading, setIsBoxLoading] = useState(false); // initially true
+  const [conversation, setConversation] = useState([{
+    type: 'Bot',
+    text: 'Welcome to MediMate! How can I assist you with your health today?',
+    time: formatTime(new Date())
+  }]);
 
   // useEffect(() => {
   //   const loadingTimeout = setTimeout(() => {
@@ -26,6 +28,42 @@ function App() {
   useEffect(() => {
     document.title = 'MediMate: Your personal health assist bot';
   }, []);
+
+  function formatTime(date) {
+    const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+    return new Intl.DateTimeFormat('en-US', options).format(date);
+  }
+
+  const clearConversation = () => {
+    setConversation([{
+      type: 'Bot',
+      text: 'Welcome to MediMate! How can I assist you with your health today?',
+      time: formatTime(new Date())
+    }]);
+  };
+
+  const saveConversation = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/save-convo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Set the content type to JSON
+        },
+        body: JSON.stringify({ conversation }), // Convert the data to JSON string
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        // Handle the response data if needed
+        console.log('Conversation saved to backend:', responseData);
+      } else {
+        throw new Error('Failed to save conversation');
+      }
+    } catch (error) {
+      // Handle any errors that occur during the POST request
+      console.error('Error saving conversation:', error);
+    }
+  };
 
   return (
     <div className="App">
@@ -40,10 +78,10 @@ function App() {
             </div>
           </div>
           <div>
-            <button className='hd-btn'>
+            <button className='hd-btn' onClick={clearConversation}>
               <img src={clear} alt="clear" />
             </button>
-            <button className='hd-btn'>
+            <button className='hd-btn' onClick={saveConversation}>
               <img src={save} alt="save" />
             </button>
             <button className='hd-btn'>
@@ -57,7 +95,7 @@ function App() {
             <h3>Loading Chat...</h3>
           </div>
         ) : (
-          <ChatBox />
+          <ChatBox conversation={conversation} setConversation={setConversation} formatTime={formatTime}/>
         )}
       </div>
     </div>

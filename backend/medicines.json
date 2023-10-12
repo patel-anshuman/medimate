@@ -1,0 +1,130 @@
+[
+    {
+      "_id": "1",
+      "name": "Paracetamol",
+      "price_INR": 20,
+      "dosage": "Take 1 tablet every 6 hours",
+      "details": "Pain reliever and fever reducer",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/1003368/teplota_500mg_tablet_15s_0_0.jpg"
+    },
+    {
+      "_id": "2",
+      "name": "Ibuprofen",
+      "price_INR": 25,
+      "dosage": "Take 2 tablets with food",
+      "details": "Nonsteroidal anti-inflammatory drug (NSAID)",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/379176/brufen_400mg_tablet_15s_0_1.jpg"
+    },
+    {
+      "_id": "3",
+      "name": "Amoxicillin",
+      "price_INR": 60,
+      "dosage": "Take 1 capsule with water",
+      "details": "Antibiotic for bacterial infections",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/50414/augmentin_duo_oral_suspension_30ml_298632_0_4.jpg"
+    },
+    {
+      "_id": "4",
+      "name": "Omeprazole",
+      "price_INR": 40,
+      "dosage": "Take 1 capsule before breakfast",
+      "details": "Proton pump inhibitor for heartburn",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/412184/omez_20mg_capsule_20s_53652_0_1.jpg"
+    },
+    {
+      "_id": "5",
+      "name": "Loratadine",
+      "price_INR": 15,
+      "dosage": "Take 1 tablet daily",
+      "details": "Antihistamine for allergies",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/44541/alaspan_10mg_tablet_10s_399659_0_1.jpg"
+    },
+    {
+      "_id": "6",
+      "name": "Aspirin",
+      "price_INR": 10,
+      "dosage": "Take 1 tablet with water",
+      "details": "Pain reliever and blood thinner",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/42323/ecosprin_75_tablet_14s_34914_0_3.jpg"
+    },
+    {
+      "_id": "7",
+      "name": "Ranitidine",
+      "price_INR": 35,
+      "dosage": "Take 1 tablet before meals",
+      "details": "H2 receptor antagonist for heartburn",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/4921/rantac_150mg_tablet_30s_31413_0_1.jpg"
+    },
+    {
+      "_id": "8",
+      "name": "Ciprofloxacin",
+      "price_INR": 75,
+      "dosage": "Take 1 tablet twice a day",
+      "details": "Broad-spectrum antibiotic",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/378628/ciplox_eye_ear_drops_10ml_45160_0_1.jpg"
+    },
+    {
+      "_id": "9",
+      "name": "Diazepam",
+      "price_INR": 50,
+      "dosage": "Take 1 tablet as needed for anxiety",
+      "details": "Benzodiazepine for anxiety and muscle spasms",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/formulation_based/injections.jpg"
+    },
+    {
+      "_id": "10",
+      "name": "Amlodipine",
+      "price_INR": 30,
+      "dosage": "Take 1 tablet daily",
+      "details": "Calcium channel blocker for high blood pressure",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/412914/stamlo_5mg_tablet_30_s_0.jpg"
+    },
+    {
+      "_id": "11",
+      "name": "Erythromycin",
+      "price_INR": 55,
+      "dosage": "Take 1 capsule with food",
+      "details": "Antibiotic for bacterial infections",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/2035/althrocin_500mg_tablet_10s_31363_0_1.jpg"
+    },
+    {
+      "_id": "12",
+      "name": "Hydrochlorothiazide",
+      "price_INR": 40,
+      "dosage": "Take 1 tablet daily in the morning",
+      "details": "Diuretic for high blood pressure",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/44085/aquazide_12_5mg_tablet_10s_35135_0_1.jpg"
+    },
+    {
+      "_id": "13",
+      "name": "Warfarin",
+      "price_INR": 25,
+      "dosage": "Take as prescribed by your doctor",
+      "details": "Anticoagulant (blood thinner)",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/899921/warf_5mg_tablet_30s_0_0.jpg"
+    },
+    {
+      "_id": "14",
+      "name": "Fexofenadine",
+      "price_INR": 30,
+      "dosage": "Take 1 tablet daily",
+      "details": "Antihistamine for allergies",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/17060/allegra_180mg_tablet_10s_0_1.jpg"
+    },
+    {
+      "_id": "15",
+      "name": "Simvastatin",
+      "price_INR": 40,
+      "dosage": "Take 1 tablet daily in the evening",
+      "details": "Statins for cholesterol management",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/333606/simvotin_10mg_tablet_10s_40870_0_1.jpg"
+    },
+    {
+      "_id": "16",
+      "name": "Metformin",
+      "price_INR": 20,
+      "dosage": "Take 1 tablet with meals",
+      "details": "Oral antidiabetic medication",
+      "img": "https://www.netmeds.com/images/product-v1/600x600/53613/glycomet_sr_500mg_tablet_20s_0_1.jpg"
+    }
+]
