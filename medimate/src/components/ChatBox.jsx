@@ -1,34 +1,63 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useRef } from 'react';
+// import axios from 'axios';
 import './ChatBox.css';
 
 import { Input } from "@chakra-ui/react";
 
-function ChatBox() {
+function ChatBox({ conversation, setConversation, formatTime }) {
     const [question, setQuestion] = useState('');
-    const [conversation, setConversation] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const conversationRef = useRef(null);
 
     const handleQuestionChange = (e) => {
         setQuestion(e.target.value);
     };
+
+    useEffect(() => {
+        if (conversationRef.current) {
+            const container = conversationRef.current;
+            container.scrollTop = container.scrollHeight;
+        }
+    }, [conversation]);
 
     const handleSubmitQuestion = async () => {
         if (!question) return;
 
         setIsLoading(true);
 
+        const curr_ques = question
+        setConversation([...conversation,
+        { text: question, type: 'You', time: formatTime() }
+        ]);
+        setQuestion('');
+
         try {
-            const response = await axios.post('http://127.0.0.1:5000/ask-question', { question });
+            const response = await fetch('http://127.0.0.1:5000/ask-question', {
+                method: 'POST',
+                body: JSON.stringify({ question: curr_ques }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
             // console.log(response);
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Backend error:', errorData.error);
+
+                setConversation([
+                    ...conversation,
+                    { text: '⚠️ Invalid response!!', type: 'Bot', time: formatTime() }
+                ]);
+
+                return;
+            }
 
             setConversation([
                 ...conversation,
-                { text: question, type: 'You' },
-                { text: response.data[0].response, type: 'Bot' }, // Use response.data.response
+                { text: response.data[0].response, type: 'Bot', time: formatTime() }
             ]);
 
-            setQuestion('');
         } catch (error) {
             console.error('Error asking question:', error);
         } finally {
@@ -38,11 +67,14 @@ function ChatBox() {
 
     return (
         <div className="chat-box">
-            <div className="conversation">
+            <div className="conversation" ref={conversationRef}>
                 {conversation.map((message, index) => (
-                    <p key={index} className={`message ${message.type}`}>
-                        <b>{message.type}: </b>{message.text}
-                    </p>
+                    <div key={index} className={`message ${message.type}`}>
+                        <p>
+                            <b>{message.type}: </b>{message.text}
+                        </p>
+                        <span className="message-time">{message.time}</span>
+                    </div>
                 ))}
             </div>
             <div className="input-area">
@@ -53,7 +85,7 @@ function ChatBox() {
                 </button>
                 <Input
                     type="text"
-                    placeholder="Ask a question..."
+                    placeholder="Ask MediMate about your health..."
                     value={question}
                     onChange={handleQuestionChange}
                     onKeyDown={(e) => e.key === "Enter" && handleSubmitQuestion()}
@@ -65,8 +97,6 @@ function ChatBox() {
                 >
                     🎙️
                 </button>
-
-
                 <button
                     onClick={handleSubmitQuestion}
                     disabled={isLoading}
