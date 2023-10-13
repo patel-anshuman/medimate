@@ -59,11 +59,11 @@ index = pinecone.Index(index_name)
 
 items = [(str(i), vector) for i, vector in enumerate(vectorized_data)]
 # print(items)
-index.upsert_items(items) # AttributeError: 'Index' object has no attribute 'upsert_items'
+# index.upsert_items(items) # AttributeError: 'Index' object has no attribute 'upsert_items'
 
 # index_info = pinecone.describe_index(index_name)
-
-# # Check the number of items (vectors) in the index
+# print(index_info)
+# Check the number of items (vectors) in the index
 # num_items = index_info.stats.num_items
 # print(f"Number of items in the index: {num_items}")
 
