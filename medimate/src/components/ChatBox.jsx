@@ -7,6 +7,25 @@ import { Input } from "@chakra-ui/react";
 function ChatBox({ conversation, setConversation, formatTime }) {
     const [question, setQuestion] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+
+    const [placeholders, setPlaceholders] = useState([
+        "📅 Schedule an appointment",
+        "📄 Upload prescription or ask for medication help",
+        "🆘 Request emergency assistance",
+        "💡 Get health tips and home remedies"
+    ]);
+    const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentPlaceholderIndex((prevIndex) => (prevIndex + 1) % placeholders.length);
+        }, 5000); // Change placeholder every 5 seconds
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, [currentPlaceholderIndex, placeholders]);
+
     const conversationRef = useRef(null);
 
     const handleQuestionChange = (e) => {
@@ -53,10 +72,19 @@ function ChatBox({ conversation, setConversation, formatTime }) {
                 return;
             }
 
-            setConversation([
-                ...conversation,
-                { text: response.data[0].response, type: 'Bot', time: formatTime() }
-            ]);
+            const newMessage = {
+                text: response.data[0].response,
+                type: 'Bot',
+                time: formatTime(),
+            };
+
+            // Adding medicine reccomendation if it exists in response
+            const recommendation = response.data[0].recommendation;
+            if (recommendation) {
+                newMessage.recommendation = recommendation;
+            }
+
+            setConversation([...conversation, newMessage]);
 
         } catch (error) {
             console.error('Error asking question:', error);
@@ -74,6 +102,18 @@ function ChatBox({ conversation, setConversation, formatTime }) {
                             <b>{message.type}: </b>{message.text}
                         </p>
                         <span className="message-time">{message.time}</span>
+                        {message.recommendation && message.recommendation.length > 0 && (
+                            <div>
+                                {message.recommendation.map((med, medIndex) => (
+                                    <div key={medIndex}>
+                                        <img src={med.img} alt={med.name[0]} />
+                                        <p>{med.name}</p>
+                                        <p>MRP: ₹{med.price}</p>
+                                        <a href="#">Buy</a>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
@@ -85,10 +125,11 @@ function ChatBox({ conversation, setConversation, formatTime }) {
                 </button>
                 <Input
                     type="text"
-                    placeholder="Ask MediMate about your health..."
+                    placeholder={`Ask to ${placeholders[currentPlaceholderIndex]}...`}
                     value={question}
                     onChange={handleQuestionChange}
                     onKeyDown={(e) => e.key === "Enter" && handleSubmitQuestion()}
+                    className="smooth-transition"
                     _focus={{ outline: "none" }}
                 />
                 <button

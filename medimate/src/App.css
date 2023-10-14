@@ -71,12 +71,14 @@ header > div:nth-child(1) > div:nth-child(2) {
   height: 90px;
   /* border: 2px solid red; */
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  /* gap: 5px; */
 }
 
 header h1 {
-  margin: auto 0px;
+  margin: 0px;
   /* border: 2px solid blue; */
 }
 
@@ -143,3 +145,15 @@ header > div:nth-child(2) {
   100% { transform: rotate(360deg); }
 }
 
+
+
+#signature {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  text-align: right;
+  margin: 40px;
+  color: #888;
+  font-size: 14px;
+  text-decoration: none;
+}
