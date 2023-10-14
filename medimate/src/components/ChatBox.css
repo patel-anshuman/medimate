@@ -4,7 +4,7 @@
     min-height: 83%;
     margin: 0 auto;
     padding: 10px;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     border-radius: 0px 0px 30px 30px;
     display: flex;
     flex-direction: column;
@@ -30,7 +30,7 @@
     box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
 }
 
-.conversation > div{
+.conversation>div {
     max-width: 80%;
     padding: 5px 10px;
     display: flex;
@@ -39,19 +39,23 @@
     align-items: flex-start;
     gap: 2px;
 }
-.conversation > div:nth-child(2) {
+
+.conversation>div:nth-child(2) {
     align-self: flex-end;
 }
-.conversation > div:nth-child(2) > span {
+
+.conversation>div:nth-child(2)>span {
     align-self: flex-end;
 }
-.message > p {
+
+.message>p {
     margin: 0px;
     padding: 10px;
     border-radius: 5px;
     text-align: left;
 }
-.message > span {
+
+.message>span {
     margin: 0px;
     font-size: 12px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -59,17 +63,18 @@
 
 }
 
-.message.You > p {
+.message.You>p {
     background-color: #3eb798;
     color: #fff;
 }
 
-.message.Bot > p {
+.message.Bot>p {
     background-color: #aadace;
     color: #333;
 }
-.message.Bot > span {
-    align-self:flex-start;
+
+.message.Bot>span {
+    align-self: flex-start;
 }
 
 .input-area {
@@ -90,6 +95,11 @@ input[type="text"] {
     border-radius: 20px;
     font-size: 16px;
 }
+
+.smooth-transition {
+    transition: placeholder 0.5s ease;
+}
+
 
 .pr-btn {
     padding: 5px 20px;
@@ -117,6 +127,7 @@ input[type="text"] {
     font-size: 16px;
 
 }
+
 .sc-btn:hover {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
@@ -125,4 +136,22 @@ button:disabled {
     background-color: #ccc;
     /* Gray color for disabled state */
     cursor: not-allowed;
+}
+
+.prompt-recommendation {
+    position: absolute;
+    border: 1px solid #333;
+    bottom: 30px;
+    inset: 50%;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    /* Translucent background */
+    padding: 10px;
+    white-space: nowrap;
+    /* Prevent line breaks */
+    overflow-x: auto;
+    /* Enable horizontal scrolling */
+    height: 60px;
+    /* Set the maximum height for the prompt recommendation tab */
+    border-top: 1px solid #ddd;
 }

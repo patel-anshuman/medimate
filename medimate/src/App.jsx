@@ -35,11 +35,16 @@ function App() {
   }
 
   const clearConversation = () => {
-    setConversation([{
-      type: 'Bot',
-      text: 'Welcome to MediMate! How can I assist you with your health today?',
-      time: formatTime(new Date())
-    }]);
+    setConversation([]);
+    setTimeout(() => {
+      setConversation([
+        {
+          type: 'Bot',
+          text: 'Welcome to MediMate! How can I assist you with your health today?',
+          time: formatTime(new Date())
+        }
+      ]);
+    }, 500);
   };
 
   const saveConversation = async () => {
@@ -75,6 +80,7 @@ function App() {
             </div>
             <div>
               <h1>MediMate</h1>
+              <span id='bot-status'>Online</span>
             </div>
           </div>
           <div>
@@ -95,9 +101,12 @@ function App() {
             <h3>Loading Chat...</h3>
           </div>
         ) : (
-          <ChatBox conversation={conversation} setConversation={setConversation} formatTime={formatTime}/>
+          <ChatBox conversation={conversation} setConversation={setConversation} formatTime={formatTime} />
         )}
       </div>
+      <a href="https://patel-anshuman.github.io/" id='signature'>
+        <span>Developed by <b>Anshuman Patel </b></span>
+      </a>
     </div>
   );
 }
