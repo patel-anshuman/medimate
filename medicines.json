@@ -1,0 +1,82 @@
+[
+    {
+      "_id": "1",
+      "name": "Paracetamol",
+      "details": "Pain reliever and fever reducer"
+    },
+    {
+      "_id": "2",
+      "name": "Ibuprofen",
+      "details": "Nonsteroidal anti-inflammatory drug (NSAID)"
+    },
+    {
+      "_id": "3",
+      "name": "Amoxicillin",
+      "details": "Antibiotic for bacterial infections"
+    },
+    {
+      "_id": "4",
+      "name": "Omeprazole",
+      "details": "Proton pump inhibitor for heartburn"
+    },
+    {
+      "_id": "5",
+      "name": "Loratadine",
+      "details": "Antihistamine for allergies"
+    },
+    {
+      "_id": "6",
+      "name": "Aspirin",
+      "details": "Pain reliever and blood thinner"
+    },
+    {
+      "_id": "7",
+      "name": "Ranitidine",
+      "details": "H2 receptor antagonist for heartburn"
+    },
+    {
+      "_id": "8",
+      "name": "Ciprofloxacin",
+      "details": "Broad-spectrum antibiotic"
+    },
+    {
+      "_id": "9",
+      "name": "Diazepam",
+      "details": "Benzodiazepine for anxiety and muscle spasms"
+    },
+    {
+      "_id": "10",
+      "name": "Amlodipine",
+      "details": "Calcium channel blocker for high blood pressure"
+    },
+    {
+      "_id": "11",
+      "name": "Erythromycin",
+      "details": "Antibiotic for bacterial infections"
+    },
+    {
+      "_id": "12",
+      "name": "Hydrochlorothiazide",
+      "details": "Diuretic for high blood pressure"
+    },
+    {
+      "_id": "13",
+      "name": "Warfarin",
+      "details": "Anticoagulant (blood thinner)"
+    },
+    {
+      "_id": "14",
+      "name": "Fexofenadine",
+      "details": "Antihistamine for allergies"
+    },
+    {
+      "_id": "15",
+      "name": "Simvastatin",
+      "details": "Statins for cholesterol management"
+    },
+    {
+      "_id": "16",
+      "name": "Metformin",
+      "details": "Oral antidiabetic medication"
+    }
+]
