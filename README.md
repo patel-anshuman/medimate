@@ -77,7 +77,7 @@ Watch my guided video walkthrough: **[Link to feature walkthrough @YouTube](http
 - Use Case: Users can use this method to inquire about medicines prescribed in their medical documents and access convenient purchase links.
 - Input Parameters: The primary input parameter is the PDF file containing prescription details.
 - Output: Generates a response with information about prescribed medicines, offering purchase links for each medicine, along with supplementary details like images, prices, and names.
-- Example Usage: response = pdf_chat(pdf_file)
+- Example Usage: `response = pdf_chat(pdf_file)`
 
 ## **Technology Stacks**
 - Front-end: React.js
