@@ -7,6 +7,9 @@ import { Input } from "@chakra-ui/react";
 function ChatBox({ conversation, setConversation, formatTime }) {
     const [question, setQuestion] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const conversationRef = useRef();
+    const [selectedFile, setSelectedFile] = useState(null);
+    const fileInputRef = useRef(null);
 
     const [placeholders, setPlaceholders] = useState([
         "📅 Schedule an appointment",
@@ -17,16 +20,10 @@ function ChatBox({ conversation, setConversation, formatTime }) {
     const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentPlaceholderIndex((prevIndex) => (prevIndex + 1) % placeholders.length);
-        }, 5000); // Change placeholder every 5 seconds
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, [currentPlaceholderIndex, placeholders]);
-
-    const conversationRef = useRef(null);
+        if (conversationRef.current) {
+            conversationRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [conversation]);
 
     const handleQuestionChange = (e) => {
         setQuestion(e.target.value);
@@ -44,54 +41,78 @@ function ChatBox({ conversation, setConversation, formatTime }) {
 
         setIsLoading(true);
 
-        const curr_ques = question
-        setConversation([...conversation,
-        { text: question, type: 'You', time: formatTime() }
+        const curr_ques = question;
+        setConversation((prevConversation) => [
+            ...prevConversation,
+            { text: question, type: 'You', time: formatTime() },
         ]);
         setQuestion('');
 
         try {
-            const response = await fetch('http://127.0.0.1:5000/ask-question', {
+            const response = await fetch('http://127.0.0.1:5000/chat', {
                 method: 'POST',
                 body: JSON.stringify({ question: curr_ques }),
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-            // console.log(response);
+            const data = await response.json();
 
             if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Backend error:', errorData.error);
+                console.error('Backend error:', data.error);
 
                 setConversation([
                     ...conversation,
-                    { text: '⚠️ Invalid response!!', type: 'Bot', time: formatTime() }
+                    { text: '⚠️ Invalid response!!', type: 'Bot', time: formatTime() },
                 ]);
+            } else {
+                const newMessage = {
+                    text: data.message,
+                    type: 'Bot',
+                    time: formatTime(),
+                };
 
-                return;
+                // Adding medicine recommendation if it exists in the response
+                const recommendation = data.recommendation;
+                if (recommendation) {
+                    newMessage.recommendation = recommendation;
+                }
+
+                setConversation((prevConversation) => [...prevConversation, newMessage]);
             }
-
-            const newMessage = {
-                text: response.data[0].response,
-                type: 'Bot',
-                time: formatTime(),
-            };
-
-            // Adding medicine reccomendation if it exists in response
-            const recommendation = response.data[0].recommendation;
-            if (recommendation) {
-                newMessage.recommendation = recommendation;
-            }
-
-            setConversation([...conversation, newMessage]);
-
         } catch (error) {
             console.error('Error asking question:', error);
         } finally {
             setIsLoading(false);
         }
     };
+
+    const handleFileChange = () => {
+        const file = fileInputRef.current.files[0];
+        if (file && file.type === 'application/pdf' && file.size <= 1024000) {
+            const formData = new FormData();
+            formData.append('pdfFile', file);
+
+            fetch('http://127.0.0.1:5000/chat', {
+                method: 'POST',
+                body: formData,
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    setConversation([
+                        ...conversation,
+                        { text: `Uploaded PDF: ${file.name}`, type: 'You', time: formatTime() }
+                    ]);
+                })
+                .catch((error) => {
+                    console.error('Error uploading PDF:', error);
+                });
+        } else {
+            console.error('Invalid PDF file format or size exceeds 1MB');
+        }
+    };
+
 
     return (
         <div className="chat-box">
@@ -118,10 +139,18 @@ function ChatBox({ conversation, setConversation, formatTime }) {
                 ))}
             </div>
             <div className="input-area">
+                <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                    ref={fileInputRef}
+                />
                 <button
                     className="sc-btn"
-                // onClick={handleAttachFile}
-                >📎
+                    onClick={() => fileInputRef.current.click()}
+                >
+                    📎
                 </button>
                 <Input
                     type="text"
