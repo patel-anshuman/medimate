@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import os
 import openai
 import sys
@@ -17,6 +18,8 @@ from langchain.chains import ConversationalRetrievalChain
 from pymongo import MongoClient
 
 sys.path.append("../..")    # relative directory path
+docs_folder = "./docs/"
+pres_persist_directory = "/docs/pres_chroma"
 
 from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())
@@ -33,22 +36,22 @@ with open("medicines.json", "r") as file:
     medicines = json.load(file)
 
 # splits -> array of strings(each med data)
-splits = []
+med_splits = []
 for medicine in medicines:
     medicine_string = json.dumps(medicine)
-    splits.append(medicine_string)
+    med_splits.append(medicine_string)
 
-persist_directory = "docs/chroma/"
+med_persist_directory = "docs/chroma/"
 embedding = OpenAIEmbeddings()
-vectordb = Chroma.from_texts(
-    texts=splits, embedding=embedding, persist_directory=persist_directory
+med_vectordb = Chroma.from_texts(
+    texts=med_splits, embedding=embedding, persist_directory=med_persist_directory
 )
 
 # General Chat Conversation Chain
 memory = ConversationBufferMemory()
 memory.save_context(
     {
-        "input": "Bot Instructions:\n1. Introduce Yourself: Start by introducing yourself as a healthcare assistant from MediMate. 🌡️🏥\n2. Welcome Message: Always initiate the conversation with a warm welcome message.\n3. Symptom Assessment: Assess the user's symptoms when prompted. Ask for symptom details and provide guidance based on the information given.\n4. Specialization: If symptoms indicate the need for a specialist, guide the user to the relevant department or specialist, and provide information on next steps.\n5. Emergency Response: If there's an emergency condition, make it a priority. Recommend dialing 108 (or the local emergency number) to call an ambulance without further questions.\n6. One Question at a Time: Remind the user to ask one health-related question at a time for focused and detailed assistance.\n7. Set Expectations: Clearly state that the bot is for health-related queries and guidance, not for personalized medical advice.\n8. Thank You Message: Prompt users to say Thank you when they're done. Acknowledge their gratitude.\nRemember, the goal is to provide efficient and helpful healthcare assistance"
+        "input": "Bot Instructions:\n1. Introduce Yourself: Begin by introducing yourself as a healthcare assistant from MediMate. 🌡️🏥\n2. Welcome Message: Always start with a warm welcome message.\n3. Symptom Assessment: Assess the user's symptoms when prompted. Ask for details and provide guidance.\n4. Specialization: If needed, guide the user to a specialist or department, and explain next steps.\n5. Emergency Response: In emergencies, prioritize and suggest dialing 108 (or local emergency number) for an ambulance.\n6. One Question at a Time: Encourage users to ask one health-related question at a time.\n7. Set Expectations: Clarify that the bot provides health guidance, not personalized medical advice.\n8. Thank You Message: Remind users to say Thank you and acknowledge their gratitude.\nOur goal is efficient and helpful healthcare assistance."
     },
     {
         "output": "Welcome to MediMate! How can I assist you with your health today?"
@@ -59,7 +62,6 @@ conversation = ConversationChain(llm=chat_response, memory=memory, verbose=False
 
 app = Flask(__name__)   # App created
 
-from flask_cors import CORS
 cors = CORS(app)
 
 @app.route('/', methods=['GET'])
@@ -73,10 +75,15 @@ def chat():
         json_data = request.get_json()
         question = json_data.get('question', '')  # Assuming the question field is in the JSON
         response = general(question)
-    elif request.files and 'pdf_file' in request.files:
-        # The received file is a PDF, call the pdf_chat() function
+    elif 'pdf_file' in request.files:
         pdf_file = request.files['pdf_file']
+
+        if not pdf_file.filename.endswith('.pdf'):
+            # The uploaded file is not a PDF
+            return jsonify({'error': 'Invalid PDF file format'}, 415)
+        
         response = pdf_chat(pdf_file)
+        
     else:
         # Handle other cases or return an error message
         response = jsonify({'error': 'Unsupported file format or request.'}, 415)
@@ -99,7 +106,54 @@ def general(question):
 def pdf_chat(pdf_file):
     # Logic for handling PDF file
     # You can access the 'pdf_file' parameter here
-    pass
+    loader = PyPDFLoader(pdf_file)
+    pages = loader.load()
+
+    text_splitter = CharacterTextSplitter(
+        separator="\n", chunk_size=1000, chunk_overlap=50, length_function=len
+    )
+    docs = text_splitter.split_documents(pages)  # separated by paras
+    # print(docs)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
+    pres_splits = text_splitter.split_documents(docs)
+
+    pres_vectordb = Chroma.from_documents(
+        documents=pres_splits, embedding=embedding, persist_directory=pres_persist_directory
+    )
+    # Delete pdf index from pinecone before creating new one
+
+    # Retrieve meds from prescription
+    qa_chain = RetrievalQA.from_chain_type(
+        llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0),
+        retriever = pres_vectordb.as_retriever()
+    )
+    extract_med = qa_chain({"query": "meds name only"})
+    # extract_med["result"]
+    # print(extract_med)
+    # return jsonify({"message": extract_med["result"]}), 200
+
+    # Sim search on med vectordb to get ids
+    sim_search = med_vectordb.similarity_search(extract_med["result"], k=5)
+    # print(sim_search)
+    sim_search_json = [json.loads(item.page_content) for item in sim_search]
+    # print(sim_search_json) # data in json format
+
+    # Collecting all unique ids from sim_search data
+    id_set = set()
+    for item in sim_search_json:
+        id_set.add(item['_id'])
+    id_array = list(id_set)
+    # print(id_array)
+
+    # Mongo search for more details
+    medicine_data = []
+    for id in id_array:
+        medicine = medicines_collection.find_one({"_id": id})
+        if medicine:
+            medicine_data.append(medicine)
+
+    # print(medicine_data)
+    return jsonify({"message": "You can buy the medicines from below:", "recommendation": medicine_data}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

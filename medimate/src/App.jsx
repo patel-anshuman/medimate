@@ -90,9 +90,9 @@ function App() {
             <button className='hd-btn' onClick={saveConversation}>
               <img src={save} alt="save" />
             </button>
-            <button className='hd-btn'>
+            {/* <button className='hd-btn'>
               <img src={dot3} alt="3 dot" />
-            </button>
+            </button> */}
           </div>
         </header>
         {isBoxLoading ? (
@@ -104,7 +104,7 @@ function App() {
           <ChatBox conversation={conversation} setConversation={setConversation} formatTime={formatTime} />
         )}
       </div>
-      <a href="https://patel-anshuman.github.io/" id='signature'>
+      <a href="https://patel-anshuman.github.io/" target="_blank" id='signature'>
         <span>Developed by <b>Anshuman Patel </b></span>
       </a>
     </div>
