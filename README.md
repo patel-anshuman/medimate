@@ -19,18 +19,20 @@ Watch my guided video walkthrough: **[Link to feature walkthrough @YouTube](http
 - chat history 
 
 ## **Installation & Getting Started**
-- Clone the repository: **`git clone <https://github.com/patel-anshuman/medimate.git>`**
+- Clone the repository:
+  ```bash
+  git clone https://github.com/patel-anshuman/medimate.git```
 
 ### **Frontend**
-- Install dependencies: **`npm install`**
-- Start the guided tour: **`npm start`**
+- Install dependencies: ```npm install```
+- Start the guided tour: ```npm start```
 
 ### **Backend**
-- Create a virtual environment: **`python -m venv venv`**
-- On Windows: **`venv\Scripts\activate`**
-- On macOS and Linux: **`source venv/bin/activate`**
-- Install Backend Dependencies: **`pip install -r requirements.txt`**
-- Run the Backend App: **`python app.py`**
+- Create a virtual environment: ```python -m venv venv```
+- On Windows: ```venv\Scripts\activate```
+- On macOS and Linux: ```source venv/bin/activate```
+- Install Backend Dependencies: ```pip install -r requirements.txt```
+- Run the Backend App: ```python app.py```
 
 ## **User Journey**
 
