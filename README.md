@@ -21,7 +21,8 @@ Watch my guided video walkthrough: **[Link to feature walkthrough @YouTube](http
 ## **Installation & Getting Started**
 - Clone the repository:
   ```bash
-  git clone https://github.com/patel-anshuman/medimate.git```
+  git clone https://github.com/patel-anshuman/medimate.git
+  ```
 
 ### **Frontend**
 - Install dependencies: ```npm install```
