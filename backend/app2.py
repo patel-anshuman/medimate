@@ -51,7 +51,7 @@ med_vectordb = Chroma.from_texts(
 memory = ConversationBufferMemory()
 memory.save_context(
     {
-        "input": "Bot Instructions:\n1. Introduce Yourself: Begin by introducing yourself as a healthcare assistant from MediMate. 🌡️🏥\n2. Welcome Message: Always start with a warm welcome message.\n3. Symptom Assessment: Assess the user's symptoms when prompted. Ask for details and provide guidance.\n4. Specialization: If needed, guide the user to a specialist or department, and explain next steps.\n5. Emergency Response: In emergencies, prioritize and suggest dialing 108 (or local emergency number) for an ambulance.\n6. One Question at a Time: Encourage users to ask one health-related question at a time.\n7. Set Expectations: Clarify that the bot provides health guidance, not personalized medical advice.\n8. Thank You Message: Remind users to say Thank you and acknowledge their gratitude.\nOur goal is efficient and helpful healthcare assistance."
+        "input": "Bot Instructions: 1. Introduction: Start by introducing yourself as a healthcare assistant from MediMate. 🌡️🏥 2. Welcome: Always begin with a warm welcome message. 3. Symptom Assessment: Prompt users to share their symptoms. Ask for details and offer guidance. 4. Specialization: If necessary, guide users to a specialist or department and explain the next steps. 5. Emergency Response: In emergencies, prioritize and recommend dialing 108 (or the local emergency number) for an ambulance. 6. One Question Rule: Encourage users to ask one health-related question at a time. 7. Set Expectations: Clarify that the bot provides health guidance, not personalized medical advice. 8. Thank You: Remind users to express gratitude and acknowledge their appreciation. Our aim is to provide efficient and helpful healthcare assistance."
     },
     {
         "output": "Welcome to MediMate! How can I assist you with your health today?"
@@ -76,11 +76,20 @@ def chat():
         question = json_data.get('question', '')  # Assuming the question field is in the JSON
         response = general(question)
     elif 'pdf_file' in request.files:
-        pdf_file = request.files['pdf_file']
+        # The received file is PDF, call the pdf_chat() function
+        if 'pdf_file' not in request.files:
+            return jsonify({'error': 'No file part'})
 
-        if not pdf_file.filename.endswith('.pdf'):
-            # The uploaded file is not a PDF
-            return jsonify({'error': 'Invalid PDF file format'}, 415)
+        pdf_file = request.files['pdf_file']
+        if pdf_file.filename == '':
+            return jsonify({'error': 'No selected file'})
+
+        clear_docs_folder()
+        pdf_filename = os.path.join(docs_folder, pdf_file.filename)
+        pdf_file.save(pdf_filename)
+
+        return jsonify({'msg': pdf_filename.filename})
+        pdf_chat(pdf_filename)
         
         response = pdf_chat(pdf_file)
         
@@ -154,6 +163,24 @@ def pdf_chat(pdf_file):
 
     # print(medicine_data)
     return jsonify({"message": "You can buy the medicines from below:", "recommendation": medicine_data}), 200
+
+def clear_docs_folder():
+    # Delete all files within the 'docs' folder
+    for item in os.listdir(docs_folder):
+        item_path = os.path.join(docs_folder, item)
+        try:
+            if os.path.isfile(item_path):
+                os.unlink(item_path)
+            elif os.path.isdir(item_path):
+                shutil.rmtree(item_path)
+        except Exception as e:
+            print(f"Error deleting {item_path}: {e}")
+
+    # Delete the 'docs/pres_chroma' folder
+    try:
+        shutil.rmtree(pres_persist_directory)
+    except Exception as e:
+        print(f"Error deleting {pres_persist_directory}: {e}")
 
 if __name__ == '__main__':
     app.run(debug=True)

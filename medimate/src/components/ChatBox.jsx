@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 // import axios from 'axios';
 import './ChatBox.css';
-
 import { Input } from "@chakra-ui/react";
 
 function ChatBox({ conversation, setConversation, formatTime }) {
@@ -20,21 +19,24 @@ function ChatBox({ conversation, setConversation, formatTime }) {
     const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0);
 
     useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentPlaceholderIndex((prevIndex) => (prevIndex + 1) % placeholders.length);
+        }, 5000); // Rotate every 5 seconds
+
+        return () => {
+            clearInterval(intervalId); // Clean up the interval on component unmount
+        };
+    }, [currentPlaceholderIndex, placeholders]);
+
+    useEffect(() => {
         if (conversationRef.current) {
-            conversationRef.current.scrollIntoView({ behavior: 'smooth' });
+            conversationRef.current.scrollTop = conversationRef.current.scrollHeight;
         }
     }, [conversation]);
 
     const handleQuestionChange = (e) => {
         setQuestion(e.target.value);
     };
-
-    useEffect(() => {
-        if (conversationRef.current) {
-            const container = conversationRef.current;
-            container.scrollTop = container.scrollHeight;
-        }
-    }, [conversation]);
 
     const handleSubmitQuestion = async () => {
         if (!question) return;
@@ -102,7 +104,7 @@ function ChatBox({ conversation, setConversation, formatTime }) {
                     console.log(data);
                     setConversation([
                         ...conversation,
-                        { text: `Uploaded PDF: ${file.name}`, type: 'You', time: formatTime() }
+                        { text: `Uploaded PDF: 📄${file.name}`, type: 'You', time: formatTime() }
                     ]);
                 })
                 .catch((error) => {
@@ -113,72 +115,85 @@ function ChatBox({ conversation, setConversation, formatTime }) {
         }
     };
 
-
-    return (
-        <div className="chat-box">
-            <div className="conversation" ref={conversationRef}>
-                {conversation.map((message, index) => (
-                    <div key={index} className={`message ${message.type}`}>
-                        <p>
-                            <b>{message.type}: </b>{message.text}
-                        </p>
-                        <span className="message-time">{message.time}</span>
-                        {message.recommendation && message.recommendation.length > 0 && (
-                            <div>
-                                {message.recommendation.map((med, medIndex) => (
-                                    <div key={medIndex}>
-                                        <img src={med.img} alt={med.name[0]} />
-                                        <p>{med.name}</p>
-                                        <p>MRP: ₹{med.price}</p>
-                                        <a href="#">Buy</a>
-                                    </div>
+    
+        return (
+            <div className="chat-box">
+                <div className="conversation" ref={conversationRef}>
+                    {conversation.map((message, index) => (
+                        <div key={index} className={`message ${message.type}`}>
+                            <p>
+                                <b>{message.type}: </b>{message.text.split('\n').map((line, index) => (
+                                    <React.Fragment key={index}>
+                                        {index > 0 && <br />}
+                                        {line}
+                                    </React.Fragment>
                                 ))}
-                            </div>
-                        )}
-                    </div>
-                ))}
+                            </p>
+                            <span className="message-time">{message.time}</span>
+                            {message.recommendation && message.recommendation.length > 0 && (
+                                <div>
+                                    {message.recommendation.map((med, medIndex) => (
+                                        <div key={medIndex} style={{
+                                            minWidth: '350px',
+                                            display: 'flex',
+                                            overflowX: 'auto',
+                                            whiteSpace: 'nowrap',
+                                        }}>
+                                            <img src={med.img} alt={med.name[0]} style={{
+                                                width: '150px',
+                                                aspectRatio: 4 / 3,
+                                            }} />
+                                            <p>{med.name}</p>
+                                            <p>MRP: ₹{med.price}</p>
+                                            <a href="#">Buy</a>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+                <div className="input-area">
+                    <input
+                        type="file"
+                        accept=".pdf"
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                        ref={fileInputRef}
+                    />
+                    <button
+                        className="sc-btn"
+                        onClick={() => fileInputRef.current.click()}
+                    >
+                        📎
+                    </button>
+                    <Input
+                        type="text"
+                        placeholder={`Ask to ${placeholders[currentPlaceholderIndex]}...`}
+                        value={question}
+                        onChange={handleQuestionChange}
+                        onKeyDown={(e) => e.key === "Enter" && handleSubmitQuestion()}
+                        className="smooth-transition"
+                        _focus={{ outline: "none" }}
+                    />
+                    <button
+                        id='mic-input' 
+                        className='sc-btn'
+                    >
+                        🎙️
+                    </button>
+                    <button
+                        onClick={handleSubmitQuestion}
+                        disabled={isLoading}
+                        size="sm"
+                        className='pr-btn'
+                    >
+                        {isLoading ? "Loading..." : "Send"}
+                    </button>
+                </div>
             </div>
-            <div className="input-area">
-                <input
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleFileChange}
-                    style={{ display: 'none' }}
-                    ref={fileInputRef}
-                />
-                <button
-                    className="sc-btn"
-                    onClick={() => fileInputRef.current.click()}
-                >
-                    📎
-                </button>
-                <Input
-                    type="text"
-                    placeholder={`Ask to ${placeholders[currentPlaceholderIndex]}...`}
-                    value={question}
-                    onChange={handleQuestionChange}
-                    onKeyDown={(e) => e.key === "Enter" && handleSubmitQuestion()}
-                    className="smooth-transition"
-                    _focus={{ outline: "none" }}
-                />
-                <button
-                    className='sc-btn'
-                // onClick={handleMicInput}
-                >
-                    🎙️
-                </button>
-                <button
-                    onClick={handleSubmitQuestion}
-                    disabled={isLoading}
-                    size="sm"
-                    className='pr-btn'
-                >
-                    {isLoading ? "Loading..." : "Send"}
-                </button>
-            </div>
+        );
+    }
 
-        </div>
-    );
-}
 
 export default ChatBox;

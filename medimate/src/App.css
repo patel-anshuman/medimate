@@ -161,7 +161,6 @@ header > div:nth-child(2) {
 @media screen and (max-width: 575px) {
   .App > div {
     width: 100%;
-    max-height: 100%;
   }
 }
 

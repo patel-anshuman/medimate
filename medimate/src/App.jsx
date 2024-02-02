@@ -10,20 +10,20 @@ import ChatBox from './components/ChatBox';
 
 function App() {
 
-  const [isBoxLoading, setIsBoxLoading] = useState(false); // initially true
+  const [isBoxLoading, setIsBoxLoading] = useState(true); // initially true
   const [conversation, setConversation] = useState([{
     type: 'Bot',
     text: 'Welcome to MediMate! How can I assist you with your health today?',
     time: formatTime(new Date())
   }]);
 
-  // useEffect(() => {
-  //   const loadingTimeout = setTimeout(() => {
-  //     setIsBoxLoading(false);
-  //   }, 3000);
+  useEffect(() => {
+    const loadingTimeout = setTimeout(() => {
+      setIsBoxLoading(false);
+    }, 3000);
 
-  //   return () => clearTimeout(loadingTimeout);
-  // }, []);
+    return () => clearTimeout(loadingTimeout);
+  }, []);
 
   useEffect(() => {
     document.title = 'MediMate: Your personal health assist bot';
