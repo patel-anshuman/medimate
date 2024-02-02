@@ -22,12 +22,27 @@
     background-position: center;
     background-size: 8%;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     padding: 5px 2px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+}
+
+.conversation::-webkit-scrollbar {
+    width: 5px; /* Adjust the width as needed */
+}
+
+.conversation::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5); /* Translucent scrollbar thumb color */
+    border-radius: 5px; /* Rounded corners for the scrollbar thumb */
+}
+
+.conversation::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1); /* Translucent scrollbar track color */
 }
 
 .conversation>div {
@@ -40,11 +55,12 @@
     gap: 2px;
 }
 
-.conversation>div:nth-child(2) {
+.conversation>div:nth-child(2n) {
     align-self: flex-end;
+    /* border: 1px solid red; */
 }
 
-.conversation>div:nth-child(2)>span {
+.conversation>div:nth-child(2n)>span {
     align-self: flex-end;
 }
 
